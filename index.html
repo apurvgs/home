@@ -190,6 +190,34 @@
             transition: all 0.3s ease;
         }
         
+        .education-item {
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .education-item::after {
+            content: "Click to know more about IIT ISM";
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: #00ffff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            border: 1px solid #00ffff;
+            box-shadow: 0 4px 8px rgba(0, 255, 255, 0.3);
+        }
+        
+        .education-item:hover::after {
+            opacity: 1;
+        }
+        
         .experience-item:hover, .education-item:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0, 255, 255, 0.2), 0 0 30px rgba(255, 0, 255, 0.1);
@@ -232,6 +260,25 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .skills-container {
+            display: flex;
+            transition: transform 0.5s ease;
+            width: 200%;
+        }
+        
+        .skills-set {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            width: 50%;
+        }
+        
+        .skill-row:hover .skills-container {
+            transform: translateX(-50%);
         }
         
         .skill { 
@@ -327,7 +374,7 @@
         @media (max-width: 768px) {
             .container { margin: 10px; padding: 15px; }
             h1 { font-size: 2.2em; }
-            .skill-row { grid-template-columns: 1fr; }
+            .skills-set { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -366,22 +413,50 @@
             <h2>🧠 Skills</h2>
             <div class="skills">
                 <div class="skill-row">
-                    <div class="skill">Prompt Optimization</div>
-                    <div class="skill">RAG</div>
-                    <div class="skill">MCP</div>
-                    <div class="skill">Agentic AI</div>
+                    <div class="skills-container">
+                        <div class="skills-set">
+                            <div class="skill">Prompt Optimization</div>
+                            <div class="skill">RAG</div>
+                            <div class="skill">MCP</div>
+                            <div class="skill">Agentic AI</div>
+                        </div>
+                        <div class="skills-set">
+                            <div class="skill">Claude</div>
+                            <div class="skill">Model Fine-tuning</div>
+                            <div class="skill">Model Distillation</div>
+                            <div class="skill">MLOps</div>
+                        </div>
+                    </div>
                 </div>
                 <div class="skill-row">
-                    <div class="skill">Architecture Design</div>
-                    <div class="skill">Scalable Service</div>
-                    <div class="skill">Microservices</div>
-                    <div class="skill">REST/GRPC/GraphQL</div>
+                    <div class="skills-container">
+                        <div class="skills-set">
+                            <div class="skill">Architecture Design</div>
+                            <div class="skill">Scalable Service</div>
+                            <div class="skill">Microservices</div>
+                            <div class="skill">REST</div>
+                        </div>
+                        <div class="skills-set">
+                            <div class="skill">GRPC</div>
+                            <div class="skill">GraphQL</div>
+                            <div class="skill">NoSQL</div>
+                        </div>
+                    </div>
                 </div>
                 <div class="skill-row">
-                    <div class="skill">AWS Services</div>
-                    <div class="skill">Java</div>
-                    <div class="skill">Cline</div>
-                    <div class="skill">Cursor</div>
+                    <div class="skills-container">
+                        <div class="skills-set">
+                            <div class="skill">AWS Services</div>
+                            <div class="skill">Java</div>
+                            <div class="skill">Cline</div>
+                            <div class="skill">Cursor</div>
+                        </div>
+                        <div class="skills-set">
+                            <div class="skill">ReactJS</div>
+                            <div class="skill">Python</div>
+                            <div class="skill">CI/CD</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -398,7 +473,7 @@
         function simulateTerminal() {
             const terminal = document.getElementById('terminal');
             const commands = [
-                { cmd: 'cat role.txt', output: 'Tech lead of a team of 7 engineers.' },
+                { cmd: 'cat role.txt', output: 'Tech lead of a team of 12 highly passionate engineers.' },
                 { cmd: 'cat projects.txt', output: 'Building next-generation AI systems and machine learning models that power intelligent services for millions of users.' },
                 { cmd: 'cat specialization.txt', output: 'Specializing in Agentic workflows, MCP Servers and LLM based output evaluation.' }
             ];
@@ -443,7 +518,17 @@
             setTimeout(runNextCommand, 1000);
         }
         
-        document.addEventListener('DOMContentLoaded', simulateTerminal);
+        document.addEventListener('DOMContentLoaded', function() {
+            simulateTerminal();
+            
+            // Add click handler for education section
+            const educationItem = document.querySelector('.education-item');
+            if (educationItem) {
+                educationItem.addEventListener('click', function() {
+                    window.open('https://www.iitism.ac.in/', '_blank');
+                });
+            }
+        });
     </script>
 </body>
 </html>
