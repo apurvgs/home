@@ -299,6 +299,31 @@
             background: linear-gradient(135deg, #ff00ff, #00ffff);
         }
         
+        .terminal {
+            background: #000;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+        
+        .terminal-prompt {
+            color: #00ffff;
+        }
+        
+        .terminal-cursor {
+            background: #00ff00;
+            animation: blink-cursor 1s step-end infinite;
+        }
+        
+        @keyframes blink-cursor {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        
         @media (max-width: 768px) {
             .container { margin: 10px; padding: 15px; }
             h1 { font-size: 2.2em; }
@@ -324,7 +349,7 @@
                 <div class="date">Current</div>
                 <div class="company">Amazon</div>
                 <div class="role">Senior SDE, Same Day Delivery Team</div>
-                <p>Tech lead of a team of 7 engineers. Building next-generation AI systems and machine learning models that power intelligent services for millions of users. Specializing in Agentic workflows, MCP Servers and LLM based output evalutaion.</p>
+                <div class="terminal" id="terminal"></div>
             </div>
         </section>
 
@@ -368,5 +393,57 @@
             <a href="#ai-projects">AI Projects</a>
         </section>
     </div>
+    
+    <script>
+        function simulateTerminal() {
+            const terminal = document.getElementById('terminal');
+            const commands = [
+                { cmd: 'cat role.txt', output: 'Tech lead of a team of 7 engineers.' },
+                { cmd: 'cat projects.txt', output: 'Building next-generation AI systems and machine learning models that power intelligent services for millions of users.' },
+                { cmd: 'cat specialization.txt', output: 'Specializing in Agentic workflows, MCP Servers and LLM based output evaluation.' }
+            ];
+            
+            let currentCommand = 0;
+            
+            function typeCommand(cmd, callback) {
+                terminal.innerHTML += '<span class="terminal-prompt">apurv@amazon:~$ </span>';
+                let i = 0;
+                const typing = setInterval(() => {
+                    terminal.innerHTML += cmd[i];
+                    i++;
+                    if (i >= cmd.length) {
+                        clearInterval(typing);
+                        terminal.innerHTML += '<br>';
+                        callback();
+                    }
+                }, 50);
+            }
+            
+            function showOutput(output, callback) {
+                setTimeout(() => {
+                    terminal.innerHTML += output + '<br><br>';
+                    callback();
+                }, 300);
+            }
+            
+            function runNextCommand() {
+                if (currentCommand < commands.length) {
+                    const { cmd, output } = commands[currentCommand];
+                    typeCommand(cmd, () => {
+                        showOutput(output, () => {
+                            currentCommand++;
+                            runNextCommand();
+                        });
+                    });
+                } else {
+                    terminal.innerHTML += '<span class="terminal-prompt">apurv@amazon:~$ </span><span class="terminal-cursor">█</span>';
+                }
+            }
+            
+            setTimeout(runNextCommand, 1000);
+        }
+        
+        document.addEventListener('DOMContentLoaded', simulateTerminal);
+    </script>
 </body>
 </html>
