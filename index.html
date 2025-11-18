@@ -93,10 +93,10 @@
         }
         
         .profile-img::after {
-            content: "Thanks for visiting my Portfolio site! I am a Senior Software Development Engineer with 6+ years of expertise in architecting and scaling enterprise-grade applications. Demonstrated track record of leading team to deliver mission-critical projects and driving technical innovation across distributed systems. Drop me a message over linkedin to connect!";
+            content: "Thanks for visiting my Portfolio site! I am a Senior Software Development Engineer with 6+ years of expertise in architecting and scaling enterprise-grade applications. Demonstrated track record of leading team to deliver mission-critical projects and driving technical innovation across distributed systems. Drop me a message on linkedin to connect!";
             position: absolute;
             top: 0;
-            left: 230px;
+            left: 220px;
             background: rgba(0, 0, 0, 0.95);
             color: #00ffff;
             padding: 15px;
@@ -117,7 +117,7 @@
             content: '';
             position: absolute;
             top: 20px;
-            left: 215px;
+            left: 205px;
             width: 0;
             height: 0;
             border-top: 15px solid transparent;
@@ -178,6 +178,32 @@
             font-weight: bold;
             margin-top: 10px;
             animation: badgePulse 2s infinite;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .ai-badge::after {
+            content: "Made with ❤️ and a little bit of prompting.";
+            position: absolute;
+            top: 0;
+            left: 100%;
+            margin-left: 10px;
+            background: rgba(0, 0, 0, 0.95);
+            color: #00ffff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            border: 1px solid #00ffff;
+            box-shadow: 0 4px 8px rgba(0, 255, 255, 0.3);
+            z-index: 1000;
+        }
+        
+        .ai-badge:hover::after {
+            opacity: 1;
         }
         
         @keyframes badgePulse {
@@ -427,9 +453,11 @@
             border: 1px solid rgba(0, 255, 255, 0.3);
             top: 100%;
             left: 0;
-            margin-top: 5px;
+            margin-top: 0;
         }
         
+        .dropdown:hover .dropdown-content,
+        .dropdown-content:hover,
         .dropdown-content.show {
             display: block;
         }
@@ -525,6 +553,11 @@
             h1 { font-size: 2.2em; }
             .skills-set { grid-template-columns: 1fr; }
             
+            .terminal {
+                max-height: 350px;
+                overflow-y: auto;
+            }
+            
             .skills-nav {
                 display: flex;
             }
@@ -549,11 +582,18 @@
                 opacity: 0;
             }
             
+            .ai-badge::after {
+                top: 40px;
+                left: 50%;
+                transform: translateX(-50%);
+                margin-left: 0;
+            }
+            
             .profile-img::after {
                 top: 130px;
                 left: 50%;
                 transform: translateX(-50%);
-                width: 280px;
+                width: 380px;
                 max-height: 200px;
                 overflow-y: auto;
             }
