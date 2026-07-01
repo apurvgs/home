@@ -30,7 +30,7 @@
         }
 
         /* ── CUSTOM SCROLLBAR ──────────────────────────────────────────── */
-        * { scrollbar-width: thin; scrollbar-color: rgba(255,0,200,.5) rgba(4,2,16,.6); }
+        html { scrollbar-width: thin; scrollbar-color: rgba(255,0,200,.5) rgba(4,2,16,.6); }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track {
             background: rgba(4,2,16,.6);
@@ -91,7 +91,7 @@
             padding: 9px 14px;
             z-index: 300;
             text-align: center;
-            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
             box-shadow: 0 0 20px rgba(112,80,255,.12);
             min-width: 128px;
         }
@@ -105,7 +105,7 @@
             background: rgba(4,2,18,.9);
             border: 1px solid rgba(0,255,136,.28);
             border-radius: 10px; padding: 10px 14px;
-            z-index: 300; backdrop-filter: blur(14px);
+            z-index: 300; -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
             box-shadow: 0 0 18px rgba(0,255,136,.07);
             min-width: 128px; font-size: .62em;
         }
@@ -195,7 +195,7 @@
             margin: 20px auto;
             padding: 0 24px 30px;
             background: rgba(4,2,16,.12);
-            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
             border-radius: 20px;
             border: 1px solid rgba(112,80,255,.18);
             box-shadow: 0 20px 60px rgba(80,0,255,.06), 0 0 80px rgba(0,180,255,.04);
@@ -304,26 +304,27 @@
         h1 {
             font-size: 2.9em; margin-bottom: 6px;
             background: linear-gradient(90deg, var(--c0), var(--c1), var(--c3));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text; position: relative; z-index: 1;
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent; color: transparent;
+            position: relative; z-index: 1;
         }
         h1.glitching::before,
         h1.glitching::after {
             content: attr(data-text);
             position: absolute; inset: 0;
-            background: inherit; -webkit-background-clip: text; background-clip: text;
-            -webkit-text-fill-color: transparent;
+            /* Reset gradient text so Firefox renders solid color */
+            background: none !important;
+            -webkit-background-clip: unset !important; background-clip: unset !important;
+            -webkit-text-fill-color: unset !important;
         }
         h1.glitching::before {
-            color: #00ffff; -webkit-text-fill-color: #00ffff;
-            background: none; -webkit-background-clip: unset; background-clip: unset;
-            opacity: .7;
+            color: #00ffff;
+            opacity: .65;
             animation: glitch-r .18s steps(2) infinite;
         }
         h1.glitching::after {
-            color: #ff00c8; -webkit-text-fill-color: #ff00c8;
-            background: none; -webkit-background-clip: unset; background-clip: unset;
-            opacity: .7;
+            color: #ff00c8;
+            opacity: .65;
             animation: glitch-l .18s steps(2) infinite;
         }
         @keyframes glitch-r {
@@ -365,8 +366,8 @@
         .boot-name {
             font-size: 2em; font-weight: bold; letter-spacing: 3px;
             background: linear-gradient(90deg, var(--c0), var(--c1), var(--c3), var(--co));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text;
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent; color: transparent;
         }
         .boot-title {
             font-family: "SF Mono", monospace; font-size: .75em;
@@ -478,7 +479,7 @@
             background: rgba(0,255,136,.04);
             border: 1px solid rgba(0,255,136,.18);
             border-radius: 10px; padding: 13px 8px; text-align: center;
-            backdrop-filter: blur(3px); transition: all .3s;
+            -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); transition: all .3s;
         }
         .stat-item:hover { border-color: rgba(0,255,136,.55); box-shadow: 0 0 18px rgba(0,255,136,.18); transform: translateY(-3px); }
         .stat-number { font-size: 1.9em; font-weight: bold; color: var(--c0); text-shadow: 0 0 10px rgba(0,255,136,.9); }
@@ -667,7 +668,7 @@
 
         .mac-mb {
             height: 26px; flex-shrink: 0;
-            background: rgba(20,20,30,.75); backdrop-filter: blur(24px);
+            background: rgba(20,20,30,.75); -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px);
             border-bottom: 1px solid rgba(255,255,255,.08);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 14px; font-size: .68em; color: rgba(255,255,255,.85);
@@ -687,7 +688,7 @@
         .mac-drop {
             display: none; position: absolute; top: calc(100% + 2px); left: 0;
             min-width: 210px; z-index: 20002;
-            background: rgba(28,28,38,.97); backdrop-filter: blur(28px);
+            background: rgba(28,28,38,.97); -webkit-backdrop-filter: blur(28px); backdrop-filter: blur(28px);
             border: 1px solid rgba(255,255,255,.12); border-radius: 8px;
             box-shadow: 0 16px 48px rgba(0,0,0,.65);
             padding: 4px 0; overflow: hidden;
@@ -743,7 +744,7 @@
             display: none; position: fixed;
             top: 50%; left: 50%; transform: translate(-50%,-50%);
             width: min(520px, 90vw);
-            background: rgba(30,30,40,.92); backdrop-filter: blur(32px);
+            background: rgba(30,30,40,.92); -webkit-backdrop-filter: blur(32px); backdrop-filter: blur(32px);
             border-radius: 12px; border: 1px solid rgba(255,255,255,.13);
             box-shadow: 0 30px 80px rgba(0,0,0,.7), 0 0 0 .5px rgba(255,255,255,.06);
             z-index: 20000; overflow: hidden;
@@ -794,7 +795,7 @@
         }
         .mac-dock-inner {
             display: flex; align-items: flex-end; gap: 8px;
-            background: rgba(255,255,255,.1); backdrop-filter: blur(24px);
+            background: rgba(255,255,255,.1); -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px);
             border: 1px solid rgba(255,255,255,.15);
             border-radius: 18px; padding: 8px 14px;
             box-shadow: 0 8px 32px rgba(0,0,0,.5);
@@ -1197,7 +1198,7 @@
    =================================================================== */
 (function () {
     const canvas = document.getElementById('particles-canvas');
-    const ctx    = canvas.getContext('2d');
+    const ctx    = canvas.getContext('2d', { alpha: false });
     const ARCH   = [5, 8, 10, 12, 10, 8, 4];
     const LRGB   = [
         [0,255,136],[0,220,255],[40,152,255],[100,80,255],
@@ -1210,8 +1211,39 @@
         '∈ℝⁿ','p(y|x)','cross-entropy','f(x)','∂','∞','∇²','ŷ',
     ];
     let W, H, neurons=[], signals=[], tokens=[], bgCanvas, bgCtx;
+    let glowSprites=[], sigSprites=[];
     const layerBase=[];
     (()=>{ let b=0; ARCH.forEach(c=>{layerBase.push(b);b+=c;}); })();
+    // cached rgb strings — avoids string interpolation per frame
+    const LSTR = LRGB.map(([r,g,b])=>`${r},${g},${b}`);
+
+    function buildSprites(){
+        // glow sprites — one per layer, 80×80, drawn once
+        glowSprites = LRGB.map(([r,g,b])=>{
+            const S=80, gc=document.createElement('canvas');
+            gc.width=gc.height=S;
+            const gx=gc.getContext('2d');
+            const gr=gx.createRadialGradient(S/2,S/2,0,S/2,S/2,S/2);
+            gr.addColorStop(0,`rgba(${r},${g},${b},.6)`);
+            gr.addColorStop(.45,`rgba(${r},${g},${b},.22)`);
+            gr.addColorStop(1,`rgba(${r},${g},${b},0)`);
+            gx.fillStyle=gr; gx.fillRect(0,0,S,S);
+            return gc;
+        });
+        // signal sprites — one per layer, 24×24
+        sigSprites = LRGB.map(([r,g,b])=>{
+            const S=24, gc=document.createElement('canvas');
+            gc.width=gc.height=S;
+            const gx=gc.getContext('2d');
+            const gr=gx.createRadialGradient(S/2,S/2,0,S/2,S/2,S/2);
+            gr.addColorStop(0,`rgba(${r},${g},${b},1)`);
+            gr.addColorStop(1,`rgba(${r},${g},${b},0)`);
+            gx.fillStyle=gr; gx.fillRect(0,0,S,S);
+            gx.fillStyle='rgba(255,255,255,.9)';
+            gx.beginPath(); gx.arc(S/2,S/2,2.5,0,Math.PI*2); gx.fill();
+            return gc;
+        });
+    }
 
     class Token {
         constructor(randomY) { this.respawn(randomY); }
@@ -1253,17 +1285,18 @@
         }
         fire() { this.act=1; }
         draw() {
-            const [r,g,b]=LRGB[this.layer];
+            const col=LSTR[this.layer];
             const idle=(Math.sin(this.phi)+1)*.09;
             const a=Math.max(idle,this.act), glow=a*15;
-            if(a>.04){
-                const gr=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r+glow+10);
-                gr.addColorStop(0,`rgba(${r},${g},${b},${a*.5})`);
-                gr.addColorStop(1,`rgba(${r},${g},${b},0)`);
-                ctx.fillStyle=gr; ctx.beginPath(); ctx.arc(this.x,this.y,this.r+glow+10,0,Math.PI*2); ctx.fill();
+            // glow via pre-rendered sprite — no gradient allocation
+            if(a>.04 && glowSprites[this.layer]){
+                const sz=(this.r+glow+10)*2;
+                ctx.globalAlpha=a;
+                ctx.drawImage(glowSprites[this.layer],this.x-sz/2,this.y-sz/2,sz,sz);
+                ctx.globalAlpha=1;
             }
             ctx.beginPath(); ctx.arc(this.x,this.y,this.r+glow*.2,0,Math.PI*2);
-            ctx.fillStyle=`rgba(${r},${g},${b},${.45+a*.55})`; ctx.fill();
+            ctx.fillStyle=`rgba(${col},${.45+a*.55})`; ctx.fill();
             ctx.beginPath(); ctx.arc(this.x,this.y,this.r*.35,0,Math.PI*2);
             ctx.fillStyle=`rgba(255,255,255,${a*.7})`; ctx.fill();
         }
@@ -1273,8 +1306,7 @@
         constructor(fi,ti) {
             this.fi=fi; this.ti=ti; this.p=0;
             this.spd=.025+Math.random()*.012;
-            const [r,g,b]=LRGB[neurons[fi].layer];
-            this.col=`${r},${g},${b}`;
+            this.layer=neurons[fi].layer;
         }
         update() {
             this.p+=this.spd;
@@ -1284,10 +1316,10 @@
         draw() {
             const fn=neurons[this.fi],tn=neurons[this.ti];
             const x=fn.x+(tn.x-fn.x)*this.p, y=fn.y+(tn.y-fn.y)*this.p;
-            const gr=ctx.createRadialGradient(x,y,0,x,y,8);
-            gr.addColorStop(0,`rgba(${this.col},1)`); gr.addColorStop(1,`rgba(${this.col},0)`);
-            ctx.fillStyle=gr; ctx.beginPath(); ctx.arc(x,y,8,0,Math.PI*2); ctx.fill();
-            ctx.beginPath(); ctx.arc(x,y,2.2,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill();
+            // use pre-rendered sprite — no gradient allocation
+            if(sigSprites[this.layer]){
+                ctx.drawImage(sigSprites[this.layer],x-12,y-12,24,24);
+            }
         }
     }
 
@@ -1315,7 +1347,7 @@
         const base=layerBase[li], cnt=ARCH[li];
         for(let i=base;i<base+cnt;i++){
             neurons[i].fire();
-            neurons[i].conn.forEach(j=>{ if(signals.length<400) signals.push(new Signal(i,j)); });
+            neurons[i].conn.forEach(j=>{ if(signals.length<180) signals.push(new Signal(i,j)); });
         }
     }
     function forwardPass() {
@@ -1362,8 +1394,8 @@
 
     function init() {
         W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight;
-        layout(); buildBg(); signals=[];
-        tokens=Array.from({length:28},()=>new Token(true));
+        layout(); buildBg(); buildSprites(); signals=[];
+        tokens=Array.from({length:16},()=>new Token(true));
         forwardPass(); setInterval(forwardPass,4800);
     }
     window.addEventListener('resize',init); init();
@@ -1371,15 +1403,42 @@
     function draw() {
         ctx.drawImage(bgCanvas,0,0); drawScan();
         tokens.forEach(t=>{t.update();t.draw();});
-        neurons.forEach((n,i)=>{
-            n.conn.forEach(j=>{
-                const m=neurons[j], act=(n.act+m.act)*.5;
-                const [r,g,b]=LRGB[n.layer];
-                ctx.beginPath(); ctx.moveTo(n.x,n.y); ctx.lineTo(m.x,m.y);
-                ctx.strokeStyle=`rgba(${r},${g},${b},${.035+act*.22})`;
-                ctx.lineWidth=.5+act*1.1; ctx.stroke();
-            });
-        });
+
+        // Batch connections per layer — one path per layer for inactive,
+        // individual strokes only for active connections. Cuts 472 → ~7 stroke calls.
+        for(let li=0;li<ARCH.length-1;li++){
+            const col=LSTR[li];
+            const base=layerBase[li], cnt=ARCH[li];
+
+            // batch all inactive connections into one path per layer
+            ctx.beginPath();
+            ctx.strokeStyle=`rgba(${col},.035)`;
+            ctx.lineWidth=.5;
+            for(let i=base;i<base+cnt;i++){
+                const ni=neurons[i];
+                ni.conn.forEach(j=>{
+                    if((ni.act+neurons[j].act)*.5<.05){
+                        ctx.moveTo(ni.x,ni.y); ctx.lineTo(neurons[j].x,neurons[j].y);
+                    }
+                });
+            }
+            ctx.stroke();
+
+            // active connections only — typically just a few
+            for(let i=base;i<base+cnt;i++){
+                const ni=neurons[i];
+                ni.conn.forEach(j=>{
+                    const act=(ni.act+neurons[j].act)*.5;
+                    if(act>=.05){
+                        ctx.beginPath();
+                        ctx.moveTo(ni.x,ni.y); ctx.lineTo(neurons[j].x,neurons[j].y);
+                        ctx.strokeStyle=`rgba(${col},${.035+act*.22})`;
+                        ctx.lineWidth=.5+act*1.1; ctx.stroke();
+                    }
+                });
+            }
+        }
+
         signals=signals.filter(s=>{s.draw();return !s.update();});
         neurons.forEach(n=>{n.update();n.draw();});
         requestAnimationFrame(draw);
