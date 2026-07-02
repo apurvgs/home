@@ -941,6 +941,209 @@
         .cl-btn.copied .cl-node { background:var(--c0); box-shadow:0 0 8px rgba(0,255,136,.8); animation:none; }
         .cl-btn.copied .cl-sub  { color:var(--c0); }
 
+        /* ── STORY OVERLAY ─────────────────────────────────────────────── */
+        #storyOverlay {
+            display: none; position: fixed; inset: 0; z-index: 25000;
+            background: #000; flex-direction: column; user-select: none;
+        }
+        #storyOverlay.active { display: flex; }
+
+        #stBg {
+            position: absolute; inset: 0;
+            transition: background .35s ease;
+        }
+        /* noise grain */
+        #stBg::after {
+            content: ''; position: absolute; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+            background-size: 256px 256px; opacity: .35; pointer-events: none;
+        }
+
+        /* progress bars */
+        .st-bars {
+            position: absolute; top: 0; left: 0; right: 0;
+            display: flex; gap: 4px; padding: 10px 14px 0; z-index: 3;
+        }
+        .st-bw {
+            flex: 1; height: 2.5px;
+            background: rgba(255,255,255,.22); border-radius: 2px; overflow: hidden;
+        }
+        .st-bf {
+            height: 100%; width: 0%;
+            background: rgba(255,255,255,.9); border-radius: 2px;
+            transition: none;
+        }
+        .st-bw.done .st-bf { width: 100%; }
+
+        /* header */
+        .st-header {
+            position: absolute; top: 22px; left: 0; right: 0;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 14px; z-index: 3; pointer-events: none;
+        }
+        .st-user { display: flex; align-items: center; gap: 10px; pointer-events: none; }
+        .st-avatar {
+            width: 38px; height: 38px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,.75); object-fit: cover; flex-shrink: 0;
+        }
+        .st-uname { font-size: .82em; color: #fff; font-weight: bold; line-height: 1.3; text-shadow: 0 1px 4px rgba(0,0,0,.7); }
+        .st-handle { font-size: .63em; color: rgba(255,255,255,.55); }
+        .st-close {
+            background: rgba(0,0,0,.28); border: none; color: rgba(255,255,255,.85);
+            font-size: 1.2em; cursor: pointer; padding: 6px 8px; border-radius: 50%;
+            line-height: 1; transition: background .2s; pointer-events: all;
+            backdrop-filter: blur(4px);
+        }
+        .st-close:hover { background: rgba(0,0,0,.5); color: #fff; }
+
+        /* content */
+        .st-content {
+            position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            padding: 90px 22px 70px; z-index: 1;
+        }
+        .st-card {
+            width: 100%; max-width: 360px;
+            animation: stSlideIn .3s cubic-bezier(.22,1,.36,1);
+        }
+        @keyframes stSlideIn {
+            from { opacity:0; transform:scale(.93) translateY(16px); }
+            to   { opacity:1; transform:scale(1) translateY(0); }
+        }
+
+        /* tap zones */
+        .st-tap-l, .st-tap-r {
+            position: absolute; top: 10%; bottom: 8%; width: 35%; z-index: 4; cursor: pointer;
+        }
+        .st-tap-l { left: 0; }
+        .st-tap-r { right: 0; }
+
+        /* pause indicator */
+        .st-pause-dot {
+            position: absolute; top: 50%; left: 50%; z-index: 5;
+            transform: translate(-50%,-50%);
+            width: 56px; height: 56px; border-radius: 50%;
+            background: rgba(0,0,0,.45); border: 2px solid rgba(255,255,255,.4);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4em; opacity: 0; pointer-events: none;
+            transition: opacity .15s;
+            backdrop-filter: blur(6px);
+        }
+        #storyOverlay.paused .st-pause-dot { opacity: 1; }
+
+        /* ── story card components ── */
+        .st-emoji { font-size: 3em; margin-bottom: 14px; display: block; line-height: 1; }
+        .st-title {
+            font-size: 2.1em; font-weight: bold; color: #fff;
+            line-height: 1.15; margin-bottom: 10px;
+            text-shadow: 0 2px 12px rgba(0,0,0,.6);
+        }
+        .st-sub {
+            font-size: .88em; color: rgba(255,255,255,.72);
+            line-height: 1.55; margin-bottom: 16px;
+        }
+        .st-divider { height: 1px; background: rgba(255,255,255,.12); margin: 14px 0; }
+        .st-tags { margin-bottom: 16px; }
+        .st-tag {
+            display: inline-block; padding: 4px 13px; border-radius: 20px;
+            font-size: .7em; font-weight: bold; letter-spacing: 1px;
+            margin: 3px 3px 3px 0; border: 1px solid;
+        }
+        .st-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+        .st-pill {
+            display: inline-flex; align-items: center; gap: 5px;
+            background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.14);
+            border-radius: 20px; padding: 5px 12px;
+            font-size: .78em; color: rgba(255,255,255,.88);
+        }
+        .st-stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+        .st-stat-box {
+            background: rgba(255,255,255,.07);
+            border: 1px solid rgba(255,255,255,.14);
+            border-radius: 14px; padding: 16px 10px; text-align: center;
+        }
+        .st-stat-n { font-size: 2.1em; font-weight: bold; color: #fff; }
+        .st-stat-l {
+            font-size: .62em; color: rgba(255,255,255,.45);
+            text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;
+        }
+        .st-btn {
+            display: flex; align-items: center; gap: 13px;
+            padding: 14px 16px; border-radius: 13px;
+            border: 1px solid rgba(255,255,255,.18);
+            background: rgba(255,255,255,.07);
+            color: #fff; text-decoration: none; cursor: pointer;
+            font-family: inherit; font-size: .86em; width: 100%;
+            margin-bottom: 10px; transition: all .2s; text-align: left;
+        }
+        .st-btn:hover { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.38); }
+        .st-btn-icon { font-size: 1.5em; flex-shrink: 0; }
+        .st-btn-main { font-weight: bold; display: block; }
+        .st-btn-sub { font-size: .72em; color: rgba(255,255,255,.45); display: block; margin-top: 2px; }
+        .st-hint-bar {
+            display: flex; align-items: center; gap: 6px;
+            font-size: .65em; color: rgba(255,255,255,.38);
+            letter-spacing: 1.5px; text-transform: uppercase; margin-top: 18px;
+        }
+        .st-hint-bar::before {
+            content: ''; flex: 1; height: 1px;
+            background: rgba(255,255,255,.12);
+        }
+        .st-hint-bar::after {
+            content: ''; flex: 1; height: 1px;
+            background: rgba(255,255,255,.12);
+        }
+
+        /* story-ring on profile pic */
+        .story-ring {
+            position: absolute; inset: -5px; border-radius: 50%; z-index: 0;
+            background: conic-gradient(var(--c0), var(--c1), var(--c3), var(--co), var(--c5), var(--c0));
+            animation: sRingSpin 4s linear infinite;
+        }
+        .story-ring::after {
+            content: ''; position: absolute; inset: 3px;
+            border-radius: 50%; background: #04020f;
+        }
+        @keyframes sRingSpin { to { transform: rotate(360deg); } }
+
+        /* hover play overlay */
+        .story-play-overlay {
+            position: absolute; inset: 0; border-radius: 50%;
+            background: rgba(0,0,0,.42);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 7px;
+            opacity: 0; transition: opacity .25s; z-index: 2; cursor: pointer;
+        }
+        .profile-wrapper:hover .story-play-overlay { opacity: 1; }
+        .story-play-icon {
+            width: 52px; height: 52px; border-radius: 50%;
+            border: 2.5px solid rgba(255,255,255,.88);
+            background: rgba(255,255,255,.14);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.25em; padding-left: 4px;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 0 22px rgba(176,40,255,.55);
+        }
+        .story-play-label {
+            font-size: .56em; color: rgba(255,255,255,.88);
+            letter-spacing: 2.5px; text-transform: uppercase; font-weight: bold;
+            text-shadow: 0 1px 6px rgba(0,0,0,.8);
+        }
+
+        /* always-visible tap badge */
+        .st-view-hint {
+            position: absolute; bottom: -30px; left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap; pointer-events: none;
+            font-size: .62em; font-weight: bold; letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, var(--c1), var(--c3), var(--co));
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent; color: transparent;
+            animation: stHintPulse 2.2s ease-in-out infinite;
+        }
+        @keyframes stHintPulse { 0%,100%{opacity:.5;} 50%{opacity:1;} }
+
         /* ── MOBILE ──────────────────────────────────────────────────────── */
         @media (max-width: 768px) {
             .container { margin: 8px; padding: 0 14px 24px; }
@@ -959,7 +1162,36 @@
             .profile-tooltip { left: 50%; top: calc(100% + 14px); transform: translateX(-50%); width: 260px; }
             .profile-tooltip::before { top: -13px; left: 50%; transform: translateX(-50%); border: none; border-left: 9px solid transparent; border-right: 9px solid transparent; border-bottom: 13px solid rgba(4,2,16,.96); }
             .ai-badge::after { top: 36px; left: 50%; transform: translateX(-50%); margin-left: 0; }
-            .terminal { height: 250px; overflow-y: auto; }
+            /* ── terminal mobile ── */
+            .terminal {
+                height: 260px; overflow-y: auto;
+                font-size: .88em; padding: 10px 12px;
+            }
+            .terminal-bar {
+                flex-wrap: wrap;
+                row-gap: 4px;
+                padding: 8px 10px 0;
+            }
+            .t-tabs {
+                order: 10;
+                flex: 0 0 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                padding-bottom: 2px;
+                /* fade right edge to hint scrollability */
+                -webkit-mask-image: linear-gradient(to right, #000 80%, transparent 100%);
+                mask-image: linear-gradient(to right, #000 80%, transparent 100%);
+            }
+            .t-tab {
+                padding: 5px 13px;
+                font-size: .74em;
+                min-height: 30px;
+                display: flex;
+                align-items: center;
+            }
+            .t-input-row { font-size: .9em; }
+            .gui-btn { font-size: .72em; padding: 8px; letter-spacing: 1.5px; }
         }
     </style>
 </head>
@@ -1031,12 +1263,18 @@
     <header>
         <div class="layer-badge">◉ Input Layer · L0</div>
         <div class="profile-wrapper">
+            <div class="story-ring"></div>
             <div class="orbit-ring"></div>
             <div class="orbit-ring-2"></div>
-            <img class="profile-pic" src="portfolio_image.png" alt="Apurv Singh">
+            <img class="profile-pic" src="portfolio_image.png" alt="Apurv Singh" onclick="openStory()" style="position:relative;z-index:1;">
+            <div class="story-play-overlay" onclick="openStory()">
+                <div class="story-play-icon">▶</div>
+                <div class="story-play-label">View Story</div>
+            </div>
             <div class="profile-tooltip">
                 Thanks for visiting! I'm a Senior SDE with 7+ years architecting enterprise-grade applications. I lead teams delivering mission-critical projects and drive AI innovation. Drop me a message on LinkedIn!
             </div>
+            <div class="st-view-hint">▶ view story</div>
         </div>
         <h1 id="heroName" data-text="Apurv Singh">Apurv Singh</h1>
         <p class="subtitle"><span id="typewriter"></span><span class="tw-cursor">|</span></p>
@@ -2577,6 +2815,289 @@ document.getElementById('clEmail')?.addEventListener('click',()=>{
         },2400);
     });
 });
+
+/* ── STORY OVERLAY ────────────────────────────────────────────────── */
+(function(){
+    const STORY_DUR = 5500;
+
+    const STORIES = [
+        {
+            bg: 'radial-gradient(ellipse at 35% 25%, #2d0b5e 0%, #0d0320 55%, #050110 100%)',
+            render: () => `
+                <div class="st-card">
+                    <span class="st-emoji">👋</span>
+                    <div class="st-title">Hi, I'm Apurv</div>
+                    <div class="st-sub">Senior Software Engineer with 7+ years building enterprise-grade systems at Amazon and Uber.</div>
+                    <div class="st-tags">
+                        <span class="st-tag" style="color:#b028ff;border-color:rgba(176,40,255,.4);background:rgba(176,40,255,.12)">📍 Seattle, US</span>
+                        <span class="st-tag" style="color:#00dcff;border-color:rgba(0,220,255,.4);background:rgba(0,220,255,.1)">🏢 Amazon</span>
+                        <span class="st-tag" style="color:#00ff88;border-color:rgba(0,255,136,.4);background:rgba(0,255,136,.1)">⚡ 7+ Years</span>
+                    </div>
+                    <div class="st-divider"></div>
+                    <div class="st-hint-bar">swipe or tap edges to navigate</div>
+                </div>`
+        },
+        {
+            bg: 'radial-gradient(ellipse at 60% 20%, #00273d 0%, #020e1a 60%, #01060f 100%)',
+            render: () => `
+                <div class="st-card">
+                    <span class="st-emoji">🚀</span>
+                    <div class="st-title">Currently<br>@ Amazon</div>
+                    <div class="st-sub">Sr. SDE · Amazon Fintech · 2022–Present</div>
+                    <div class="st-grid">
+                        <span class="st-pill">🏗️ Platform Architecture</span>
+                        <span class="st-pill">⚙️ Distributed Systems</span>
+                        <span class="st-pill">🤖 AI/ML Integration</span>
+                        <span class="st-pill">👥 Tech Lead · 12 engs</span>
+                        <span class="st-pill">💳 Payments Infra</span>
+                        <span class="st-pill">📦 Microservices</span>
+                    </div>
+                    <div class="st-divider"></div>
+                    <div class="st-sub" style="margin-bottom:0;font-size:.82em">Leading mission-critical payment infrastructure serving hundreds of thousands of customers daily.</div>
+                </div>`
+        },
+        {
+            bg: 'radial-gradient(ellipse at 50% 40%, #0f0e30 0%, #060520 60%, #030214 100%)',
+            render: () => `
+                <div class="st-card">
+                    <span class="st-emoji">⚙️</span>
+                    <div class="st-title">My Stack</div>
+                    <div class="st-grid">
+                        <span class="st-pill">☕ Java</span>
+                        <span class="st-pill">🐍 Python</span>
+                        <span class="st-pill">🟦 TypeScript</span>
+                        <span class="st-pill">⚛️ React</span>
+                        <span class="st-pill">☁️ AWS</span>
+                        <span class="st-pill">🐳 Docker</span>
+                        <span class="st-pill">☸️ Kubernetes</span>
+                        <span class="st-pill">🗄️ PostgreSQL</span>
+                        <span class="st-pill">⚡ Redis</span>
+                        <span class="st-pill">📨 Kafka</span>
+                        <span class="st-pill">🔭 Spark</span>
+                        <span class="st-pill">🧠 ML / AI</span>
+                        <span class="st-pill">🔬 LLMs</span>
+                        <span class="st-pill">🌊 Flink</span>
+                    </div>
+                </div>`
+        },
+        {
+            bg: 'radial-gradient(ellipse at 40% 60%, #012d1a 0%, #010d08 60%, #000802 100%)',
+            render: () => `
+                <div class="st-card">
+                    <span class="st-emoji">📊</span>
+                    <div class="st-title">By the Numbers</div>
+                    <div class="st-stat-row">
+                        <div class="st-stat-box">
+                            <div class="st-stat-n st-count" data-target="7" data-suffix="+">0</div>
+                            <div class="st-stat-l">Years Exp</div>
+                        </div>
+                        <div class="st-stat-box">
+                            <div class="st-stat-n st-count" data-target="2">0</div>
+                            <div class="st-stat-l">Companies</div>
+                        </div>
+                        <div class="st-stat-box">
+                            <div class="st-stat-n st-count" data-target="12" data-suffix="+">0</div>
+                            <div class="st-stat-l">Engineers Led</div>
+                        </div>
+                        <div class="st-stat-box">
+                            <div class="st-stat-n st-count" data-target="100" data-suffix="K+">0</div>
+                            <div class="st-stat-l">Users Impacted</div>
+                        </div>
+                    </div>
+                </div>`,
+            onShow: () => {
+                setTimeout(() => {
+                    document.querySelectorAll('.st-count').forEach(el => {
+                        const target = +el.dataset.target;
+                        const suffix = el.dataset.suffix || '';
+                        let n = 0;
+                        const step = target / 28;
+                        const iv = setInterval(() => {
+                            n = Math.min(n + step, target);
+                            el.textContent = Math.floor(n) + suffix;
+                            if(n >= target) clearInterval(iv);
+                        }, 36);
+                    });
+                }, 120);
+            }
+        },
+        {
+            bg: 'radial-gradient(ellipse at 60% 30%, #1a1000 0%, #0a0700 60%, #050400 100%)',
+            render: () => `
+                <div class="st-card">
+                    <span class="st-emoji">🚗</span>
+                    <div class="st-title">Previously<br>@ Uber</div>
+                    <div class="st-sub">Software Engineer II · Uber</div>
+                    <div class="st-grid">
+                        <span class="st-pill">🗺️ Maps Platform</span>
+                        <span class="st-pill">🔧 Backend Systems</span>
+                        <span class="st-pill">📈 Real-time Data</span>
+                        <span class="st-pill">🌐 Global Scale</span>
+                        <span class="st-pill">🏎️ Surge Pricing</span>
+                        <span class="st-pill">📡 Geo Services</span>
+                    </div>
+                    <div class="st-divider"></div>
+                    <div class="st-sub" style="margin-bottom:0;font-size:.82em">Built ride-hailing infrastructure processing millions of real-time location events per second.</div>
+                </div>`
+        },
+        {
+            bg: 'radial-gradient(ellipse at 50% 30%, #3d0028 0%, #160010 55%, #0a0008 100%)',
+            render: () => `
+                <div class="st-card">
+                    <span class="st-emoji">🤝</span>
+                    <div class="st-title">Let's Connect</div>
+                    <div class="st-sub">Always open to interesting conversations, collaborations, and opportunities.</div>
+                    <a class="st-btn" href="https://linkedin.com/in/apurvgsingh" target="_blank" onclick="event.stopPropagation()">
+                        <span class="st-btn-icon">💼</span>
+                        <span>
+                            <span class="st-btn-main">LinkedIn</span>
+                            <span class="st-btn-sub">linkedin.com/in/apurvgsingh</span>
+                        </span>
+                    </a>
+                    <button class="st-btn" onclick="event.stopPropagation();stCopyEmail(this)">
+                        <span class="st-btn-icon">✉️</span>
+                        <span>
+                            <span class="st-btn-main">Email</span>
+                            <span class="st-btn-sub" id="stEmailSub">apurvgsingh@gmail.com · tap to copy</span>
+                        </span>
+                    </button>
+                </div>`
+        }
+    ];
+
+    let cur = 0, paused = false;
+    let timer = null, elapsed = 0, startTime = 0;
+    let touchStartX = 0, touchStartY = 0, holdTimer = null;
+
+    function openStory() {
+        cur = 0;
+        document.getElementById('storyOverlay').classList.add('active');
+        document.body.style.overflow = 'hidden';
+        buildBars();
+        showStory(0);
+        document.addEventListener('keydown', keyHandler);
+    }
+
+    function closeStory() {
+        document.getElementById('storyOverlay').classList.remove('active');
+        document.body.style.overflow = '';
+        clearTimer();
+        document.removeEventListener('keydown', keyHandler);
+    }
+
+    function buildBars() {
+        const wrap = document.getElementById('stBars');
+        wrap.innerHTML = STORIES.map(() => `<div class="st-bw"><div class="st-bf"></div></div>`).join('');
+    }
+
+    function showStory(idx) {
+        cur = Math.max(0, Math.min(idx, STORIES.length - 1));
+        clearTimer();
+        elapsed = 0;
+
+        // background
+        document.getElementById('stBg').style.background = STORIES[cur].bg;
+
+        // content
+        document.getElementById('stContent').innerHTML = STORIES[cur].render();
+        if(STORIES[cur].onShow) STORIES[cur].onShow();
+
+        // progress bars
+        document.querySelectorAll('.st-bw').forEach((b, i) => {
+            b.classList.toggle('done', i < cur);
+            const fill = b.querySelector('.st-bf');
+            fill.style.transition = 'none';
+            fill.style.width = i < cur ? '100%' : '0%';
+        });
+
+        startTimer();
+    }
+
+    function startTimer() {
+        paused = false;
+        startTime = Date.now() - elapsed;
+        const activeFill = document.querySelectorAll('.st-bw')[cur]?.querySelector('.st-bf');
+        timer = setInterval(() => {
+            if(paused) return;
+            elapsed = Date.now() - startTime;
+            const pct = Math.min(elapsed / STORY_DUR * 100, 100);
+            if(activeFill) activeFill.style.width = pct + '%';
+            if(elapsed >= STORY_DUR) { clearInterval(timer); storyNext(); }
+        }, 16);
+    }
+
+    function clearTimer() {
+        if(timer) { clearInterval(timer); timer = null; }
+    }
+
+    function storyNext() {
+        if(cur >= STORIES.length - 1) { closeStory(); return; }
+        showStory(cur + 1);
+    }
+
+    function storyPrev() {
+        showStory(cur > 0 ? cur - 1 : 0);
+    }
+
+    function pauseStory() {
+        if(paused) return;
+        paused = true;
+        elapsed = Date.now() - startTime;
+        document.getElementById('storyOverlay').classList.add('paused');
+    }
+
+    function resumeStory() {
+        if(!paused) return;
+        paused = false;
+        startTime = Date.now() - elapsed;
+        document.getElementById('storyOverlay').classList.remove('paused');
+    }
+
+    // pointer / touch
+    function onPD(e) {
+        touchStartX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
+        touchStartY = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
+        holdTimer = setTimeout(pauseStory, 160);
+    }
+    function onPU(e) {
+        clearTimeout(holdTimer);
+        if(paused) { resumeStory(); return; }
+        const ex = e.clientX ?? e.changedTouches?.[0]?.clientX ?? 0;
+        const ey = e.clientY ?? e.changedTouches?.[0]?.clientY ?? 0;
+        const dx = ex - touchStartX, dy = ey - touchStartY;
+        if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+            dx < 0 ? storyNext() : storyPrev();
+        }
+    }
+
+    function keyHandler(e) {
+        if(!document.getElementById('storyOverlay').classList.contains('active')) return;
+        if(e.key === 'Escape')      closeStory();
+        if(e.key === 'ArrowRight')  storyNext();
+        if(e.key === 'ArrowLeft')   storyPrev();
+    }
+
+    window.stCopyEmail = function(btn) {
+        navigator.clipboard?.writeText('apurvgsingh@gmail.com').catch(()=>{});
+        const sub = document.getElementById('stEmailSub');
+        if(sub) {
+            sub.textContent = '✓ Copied to clipboard!';
+            setTimeout(() => { sub.textContent = 'apurvgsingh@gmail.com · tap to copy'; }, 2500);
+        }
+    };
+
+    window.openStory  = openStory;
+    window.closeStory = closeStory;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const o = document.getElementById('storyOverlay');
+        if(!o) return;
+        o.addEventListener('pointerdown', onPD);
+        o.addEventListener('pointerup',   onPU);
+        document.getElementById('stTapL').addEventListener('click', e => { e.stopPropagation(); storyPrev(); });
+        document.getElementById('stTapR').addEventListener('click', e => { e.stopPropagation(); storyNext(); });
+    });
+})();
 </script>
 <!-- ── macOS DESKTOP OVERLAY ───────────────────────────────────────── -->
 <div id="macDesktop">
@@ -2678,6 +3199,26 @@ document.getElementById('clEmail')?.addEventListener('click',()=>{
             </div>
         </div>
     </div>
+</div>
+
+<!-- ── STORY OVERLAY ───────────────────────────────────────────────── -->
+<div id="storyOverlay">
+    <div id="stBg"></div>
+    <div class="st-bars" id="stBars"></div>
+    <div class="st-header">
+        <div class="st-user">
+            <img class="st-avatar" src="portfolio_image.png" alt="Apurv">
+            <div>
+                <div class="st-uname">Apurv Singh</div>
+                <div class="st-handle">Senior SDE · Amazon</div>
+            </div>
+        </div>
+        <button class="st-close" onclick="closeStory()">✕</button>
+    </div>
+    <div class="st-content" id="stContent"></div>
+    <div class="st-tap-l" id="stTapL"></div>
+    <div class="st-tap-r" id="stTapR"></div>
+    <div class="st-pause-dot">⏸</div>
 </div>
 </body>
 </html>
